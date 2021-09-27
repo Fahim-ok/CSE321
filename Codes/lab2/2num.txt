@@ -1,0 +1,4 @@
+for LoremText in ./*.txt
+do
+  echo "Fahim Ul Islam" >> $LoremText
+done

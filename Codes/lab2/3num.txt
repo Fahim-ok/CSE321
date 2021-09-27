@@ -1,0 +1,32 @@
+#!/bin/bash
+
+echo "Enter an Integer"
+read int
+
+calculation_happy_prime(){
+  calc=0
+  i=0
+  while [ $i -lt ${#int} ];
+  do 
+    c=${int:$i:1}
+    calc=$(($calc+($c*$c)))
+    i=$(($i+1))
+  done
+  return $(($calc))
+}
+
+end=$((SECONDS+3))
+until [ $int = 1 ]
+do
+  calculation_happy_prime
+
+  int=$?
+if [ $SECONDS -eq $end ];
+then break
+fi
+done
+if [ $int -eq 1 ];
+then echo "This number is a happy prime number"
+else
+  echo "This number is not a happy prime number"
+fi

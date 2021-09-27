@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo "Enter a number"
+read num
+
+
+
+if  [ $((num % 3)) == 0 ] || [ $((num % 2)) == 0 ];
+then 
+    echo "Nihao"
+
+elif [ $((num % 3)) == 0 ] && [ $((num % 2)) == 0 ];
+then
+    echo "Hello"
+else
+    echo "Hola"
+
+fi

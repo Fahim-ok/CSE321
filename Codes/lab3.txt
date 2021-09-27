@@ -1,0 +1,431 @@
+*Task1 -->
+
+
+public class Task1 {
+
+    public static void main(String[] args) throws Exception {
+
+        new ThreadOne().start();
+
+    }
+}
+
+class ThreadOne extends Thread {
+
+    @Override
+
+    public void run() {
+        System.out.println("Thread One");
+
+        for (int i = 1; i <= 10; i++) {
+            System.out.print(i + " ");
+        }
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+
+        System.out.println();
+
+        ThreadTwo threadTwo = new ThreadTwo();
+
+        threadTwo.start();
+
+        try {
+            threadTwo.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Thread One");
+
+        for (int i = 21; i <= 30; i++) {
+            System.out.print(i + " ");
+
+        }
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+
+        System.out.println();
+
+    }
+}
+
+class ThreadTwo extends Thread {
+
+    @Override
+
+    public void run() {
+        System.out.println("Thread Two");
+
+        for (int i = 11; i <= 20; i++) {
+            System.out.print(i + " ");
+        }
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+        System.out.println();
+
+    }
+}
+
+
+
+
+*Task2 -->
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+
+public class Task2 {
+
+    public static void main(String[] args) throws Exception {
+
+        ArrayList<Threading> arrayList = new ArrayList<>();
+        int end = 0;
+        for (int i = 0; i < 10; i++) {
+            int finalPoint = (i + 1) * 10000;
+            Threading t = new Threading(end + 1, finalPoint, i);
+            t.start();
+            arrayList.add(t);
+            end = finalPoint;
+        }
+
+        for (Threading i : arrayList) {
+            try {
+                i.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+
+        }
+
+        int maximum = 0;
+        int maximumInt = 1;
+
+        for (Threading i : arrayList) {
+
+            if (i.getMaxCount() > maximum) {
+                maximum = i.getMaxCount();
+                maximumInt = i.getMaxVal();
+            }
+        }
+
+        System.out.println(
+                MessageFormat.format("Here are the integers  {0} and the largest divisor is {1}", maximumInt, maximum));
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+
+    }
+
+}
+
+class Threading extends Thread {
+
+    private int start, end, maximumCount, threadNumber, maximumVal;
+
+    public Threading(int start, int end, int threadNumber) {
+
+        this.start = start;
+        this.end = end;
+        this.threadNumber = threadNumber;
+    }
+
+    public int getMaxCount() {
+        return maximumCount;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getMaxVal() {
+        return maximumVal;
+    }
+
+    public int getThreadNumber() {
+        return threadNumber;
+    }
+
+    @Override
+
+    public void run() {
+        for (int i = start; i <= end; i++) {
+            int c = getNumberDivisor(i);
+
+            if (c > maximumCount) {
+                maximumCount = c;
+                maximumVal = i;
+            }
+        }
+    }
+
+    private int getNumberDivisor(int value) {
+        int count = 0;
+
+        for (int i = 1; i <= value; i++) {
+            if (value % i == 0) {
+                count++;
+            }
+        }
+
+        return count;
+
+    }
+}
+
+
+
+
+*Task2(Bonus) -->
+
+
+import java.util.ArrayList;
+
+public class Task2Bonus {
+    public static void main(String[] args) throws Exception {
+
+        ArrayList<Threading> arrayList = new ArrayList<>();
+        int end = 0;
+        System.out.println("Single Thread");
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+
+        long timeStart = System.currentTimeMillis();
+
+        for (int i = 0; i < 10; i++) {
+            int finalPoint = (i + 1) * 10000;
+            Threading t = new Threading(end + 1, finalPoint, i);
+            t.run();
+            arrayList.add(t);
+            end = finalPoint;
+        }
+
+        long timeEnd = System.currentTimeMillis();
+
+        System.out.println("Single thread execution time " + (timeEnd - timeStart));
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+
+        end = 0;
+        arrayList.clear();
+        System.out.println("Multithread");
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+
+        timeStart = System.currentTimeMillis();
+
+        for (int i = 0; i < 10; i++) {
+            int finalPoint = (i + 1) * 10000;
+            Threading t = new Threading(end + 1, finalPoint, i);
+            t.start();
+            arrayList.add(t);
+            end = finalPoint;
+        }
+
+        for (Threading i : arrayList) {
+            try {
+                i.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        timeEnd = System.currentTimeMillis();
+
+        System.out.println("Multithread execution time " + (timeEnd - timeStart));
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+    }
+}
+
+class Threading extends Thread {
+
+    private int start, end, maximumCount, threadNumber, maximumVal;
+    
+
+    public Threading (int start, int end, int threadNumber) {
+
+        this.start = start;
+        this.end = end;
+        this.threadNumber = threadNumber;
+    }
+
+    public int getMaximumCount() {
+        return maximumCount;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getMaximumVal() {
+        return maximumVal;
+    }
+
+    public int getThreadNumber() {
+        return threadNumber;
+    }
+
+    @Override
+
+    public void run() {
+        for (int i = start; i <= end; i++) {
+            int c = getNumberDivisor(i);
+
+            if (c > maximumCount) {
+                maximumCount = c;
+                maximumVal = i;
+            }
+        }
+    }
+
+    private int getNumberDivisor(int value) {
+        int count = 0;
+
+        for (int i = 1; i <= value; i++) {
+            if (value % i == 0) {
+                count++;
+            }
+        }
+
+        return count;
+
+    }
+}
+
+*Task3 -->
+
+
+class QuickSort extends Thread {
+
+    private int lowerlimit;
+    private int higherlimit;
+    private int[] array;
+
+    public QuickSort(int[] array, int lowerlimit, int higherlimit) {
+        this.lowerlimit = lowerlimit;
+        this.higherlimit = higherlimit;
+        this.array = array;
+    }
+
+    public int[] getArr() {
+        return array;
+    }
+
+    private int partition(int[] array, int lowerlimit, int higherlimit) {
+        int pivot = array[higherlimit];
+        int i = lowerlimit - 1;
+        for (int j = lowerlimit; j < higherlimit; j++) {
+
+            if (array[j] <= pivot) {
+                i++;
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+
+        int temp = array[i + 1];
+        array[i + 1] = array[higherlimit];
+        array[higherlimit] = temp;
+
+        return i + 1;
+
+    }
+
+    @Override
+
+    public void run() {
+
+        if (lowerlimit < higherlimit) {
+
+            int partitionIndex = partition(array, lowerlimit, higherlimit);
+
+            QuickSort leftPartThread = new QuickSort(array, lowerlimit, partitionIndex - 1);
+
+            QuickSort rightPartThread = new QuickSort(array, partitionIndex + 1, higherlimit);
+
+            leftPartThread.start();
+            try {
+                Thread.sleep(500);
+            } catch (Exception e) {
+
+            }
+            rightPartThread.start();
+
+            try {
+                leftPartThread.join();
+                rightPartThread.join();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+}
+
+public class Task3 {
+
+    public static void main(String[] args) throws Exception {
+        int array[] = { 6, 3, 2, 7, 11 };
+
+        QuickSort quickSort = new QuickSort(array, 0, array.length - 1);
+        quickSort.start();
+
+        try {
+            quickSort.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.sleep(1500);
+        } catch (Exception e) {
+
+        }
+
+        System.out.println("Sorted value");
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {
+
+        }
+
+        for (int i : array) {
+            System.out.print(i + " ");
+        }
+
+        System.out.println();
+
+    }
+
+}
+
+
+

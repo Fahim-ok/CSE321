@@ -1,0 +1,53 @@
+#!/bin/bash
+
+
+echo "Enter a valid ID"
+read ID
+
+
+id=$( printf $ID )
+c=${#id}
+
+EnrollmentYear="20"${id:0:2}
+
+
+semester=${id:2:1}
+
+SemesterEnroll(){
+  if [ $semester -eq 1 ];
+    then 
+    semester="Spring"
+  elif [ $semester -eq 2 ];
+    then 
+    semester="Fall"
+  elif [ $semester -eq 3 ];
+    then 
+    semester="Summer"
+  else
+    echo "Invalid"
+  fi
+}
+SemesterEnroll
+
+
+
+department=${id:3:2}
+unique_serial_num=${id:5:3}
+
+
+check_validity()
+{
+  if [ $c -eq 8 ];
+    then 
+    if [ $department -eq "01" ];
+    then department="is from the Dept. of CSE"
+    echo "The student "$department" enrolled in "$semester" "$EnrollmentYear
+    else
+    department="is not from the Dept. of CSE"
+    echo "The student "$department
+    fi
+  else
+    echo "Invalid BRACU ID"
+  fi
+}
+check_validity $c
